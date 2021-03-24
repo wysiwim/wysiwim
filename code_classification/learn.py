@@ -150,18 +150,18 @@ def train_model(model, criterion, optimizer, scheduler, dataloaders, dataset_siz
 def learn(data_path, image_path, model_selection, epochs=25):
     # Normalization for both phases
     data_transforms = {
-    'train': transforms.Compose([
-        transforms.Resize(230),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-    'test': transforms.Compose([
-        transforms.Resize(230),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
+        'train': transforms.Compose([
+            transforms.Resize(230),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
+        'test': transforms.Compose([
+            transforms.Resize(230),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ]),
     }
 
     pddat = pd.read_csv(data_path)
@@ -196,11 +196,14 @@ def learn(data_path, image_path, model_selection, epochs=25):
 
     if model_selection == "resnet50":
         model_ft = models.resnet50(pretrained=True)
-    else:
+    elif model_selection == "resnet18":
         model_ft = models.resnet18(pretrained=True)
+    elif model_selection == "denset":
+        model_ft = torch.hub.load('pytorch/vision:v0.6.0', 'densenet121', pretrained=True)
 
-    num_ftrs = model_ft.fc.in_features
-    model_ft.fc = nn.Linear(num_ftrs, label_count)
+    if model_selection != "denset":
+        num_ftrs = model_ft.fc.in_features
+        model_ft.fc = nn.Linear(num_ftrs, label_count)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model_ft = model_ft.to(device)

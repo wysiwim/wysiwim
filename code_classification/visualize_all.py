@@ -12,7 +12,7 @@ import threading
 from PIL import Image
 
 
-ds_path = "<repo_path>/clone_classification/datasets" #REPLACE <repo_path>
+ds_path = "/Users/abdoulkader.kabore/snt/ImageRepresentation/wysiwim/code_classification/datasets" #REPLACE <repo_path>
 
 NB_CORES = multiprocessing.cpu_count()
 fail_lock = threading.Lock()
@@ -25,7 +25,7 @@ def visualize(algorithm, lang, code, out_path):
     except:
         fail_lock.acquire()
         try:
-            print("generating image %s-%s: %s failed" % (dataset, algo, cid))
+            # print("generating image %s-%s: %s failed" % (dataset, algo, cid))
             print(traceback.format_exc())
             print("generating default image as replacement")
 
@@ -84,4 +84,6 @@ def try_visualize(algo, lang, dataset, datasets_path, lazy_mode):
 
 lazy_mode = True #since all current datasets are based on the same data, we can render images per id only once
 
-try_visualize("st", "C", "oj", ds_path, lazy_mode)
+# try_visualize("st", "C", "oj", ds_path, lazy_mode)
+# try_visualize("sh", "C", "oj", ds_path, lazy_mode)
+try_visualize("kp", "C", "oj", ds_path, lazy_mode)

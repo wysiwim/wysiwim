@@ -1,10 +1,11 @@
-from paths import *
+# from paths import *
 import pandas as pd
 import pandas.io.sql as pdsql
 import psycopg2
 import os
 
-tool_path = "<repo_path>" # REPLACE <repo_path>
+tool_path = "/Users/abdoulkader.kabore/snt/ImageRepresentation/wysiwim/clone_detection" # REPLACE <repo_path>
+astnn_path = "/Users/abdoulkader.kabore/snt/ImageRepresentation/astnn/clone"
 
 def extract(T4_only = False):
     clone_pairs_train = pd.read_pickle(astnn_path + '/data/java/train/blocks.pkl')#.sample(frac=0.05, random_state=42)
@@ -38,7 +39,7 @@ def extract(T4_only = False):
     #TODO change password of user sa to sa (empty by default but no empty password allowed by psycopg2)
     # run the database using: (replace <bcb_path>)
     #     java -cp h2-*.jar org.h2.tools.Server -baseDir <bcb_path>/bigclonebenchdb -ifExists
-    conn = psycopg2.connect("dbname=bcb user='sa' password='sa' host='localhost' port=5435")
+    conn = psycopg2.connect("dbname=/Users/abdoulkader.kabore/snt/ImageRepresentation/BigCloneEval/bigclonebenchdb/bcb user='sa' password='sa' host='localhost' port=5435")
     query = "SELECT FUNCTION_ID_ONE, FUNCTION_ID_TWO, FUNCTIONALITY_ID FROM CLONES"
 
     dat = pdsql.read_sql_query(query, conn)

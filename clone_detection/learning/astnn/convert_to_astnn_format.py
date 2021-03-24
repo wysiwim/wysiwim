@@ -1,4 +1,4 @@
-from paths import *
+#from paths import *
 import pandas as pd
 import pandas.io.sql as pdsql
 import psycopg2

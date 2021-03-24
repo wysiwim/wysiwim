@@ -4,7 +4,7 @@ import time
 import traceback
 from expreport import report
 
-DATASETS_PATH = "<repo_path>/clone_classification/datasets"  # REPLACE <repo_path>
+DATASETS_PATH = ""  # REPLACE <repo_path>
 
 def try_learn(algo_name, algo, dataset, vis, datasets_path, model_selection, epochs, lazy_mode):
 
@@ -49,10 +49,10 @@ def exp1():
     for run in range(3):
         report.run = run
         print("-CSV-Run: %s" % run)
-        for resnet in ["resnet18", "resnet50"]:
+        for model_select in ["resnet50"]: # , "resnet18", "resnet50"]:
             for vis in ["st"]:
                 for dataset in ["oj"]:
-                    try_learn("cc", learn, dataset, vis, datasets_path, resnet, epochs, lazy_mode)
+                    try_learn("cc", learn, dataset, vis, DATASETS_PATH, model_select, epochs, lazy_mode)
     report.reset()
 
 exp1()

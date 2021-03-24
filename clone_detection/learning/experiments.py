@@ -5,7 +5,7 @@ import time
 import traceback
 from expreport import report
 
-datasets_path = "<repo_path>/clone_detection/datasets" # REPLACE <repo_path>
+datasets_path = "" # REPLACE <repo_path>
 
 def try_learn(algo_name, algo, dataset, vis, datasets_path, epochs, lazy_mode, retrain):
 
@@ -41,13 +41,12 @@ def try_learn(algo_name, algo, dataset, vis, datasets_path, epochs, lazy_mode, r
     print()
     print()
 
-lazy_mode = True #since all current datasets are based on the same data, we can render images per id only once
-epochs = 5
+lazy_mode = True # since all current datasets are based on the same data, we can render images per id only once
+epochs = 1
 algos = {"ccd": learn,
          "astnn": alg_astnn.learn}
 
 start_time_str = time.strftime("%Y_%m_%d__%H_%M_%S", time.gmtime())
-
 
 # Note: the exp1-3 do NOT correspond exactly to the experiments, some data has to be split from the resulting csv files to reproduce the experiment results 
 def exp1():
@@ -69,7 +68,7 @@ def exp2():
         for alg in ["ccd"]:
             for vis in ["st", "sh", "kp", "as"]:
                 for dataset in ["ds_with_duplicates", "ds_no_duplicates"]:
-                    try_learn(alg, algos[alg], dataset, None, datasets_path, epochs, lazy_mode, False)
+                    try_learn(alg, algos[alg], dataset, vis, datasets_path, epochs, lazy_mode, False)
     report.reset()
 
 exp2()

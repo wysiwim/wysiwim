@@ -13,7 +13,7 @@ import multiprocessing
 import threading
 from PIL import Image
 
-ds_path = "<repo_path>/clone_detection/datasets" # REPLACE <repo_path>
+ds_path = "/Users/abdoulkader.kabore/snt/ImageRepresentation/wysiwim/clone_detection/datasets" # REPLACE <repo_path>
 
 NB_CORES = multiprocessing.cpu_count()
 fail_lock = threading.Lock()
@@ -86,12 +86,17 @@ def try_visualize(algo, lang, dataset, datasets_path, lazy_mode):
 
 lazy_mode = True #since all current datasets are based on the same data, we can render images per id only once
 
-try_visualize("st", "java", "ds_with_duplicates", ds_path, lazy_mode)
-try_visualize("sh", "java", "ds_with_duplicates", ds_path, lazy_mode)
-try_visualize("kp", "java", "ds_with_duplicates", ds_path, lazy_mode)
-try_visualize("as", "java", "ds_with_duplicates", ds_path, lazy_mode)
+# try_visualize("st", "java", "ds_with_duplicates", ds_path, lazy_mode)
+# try_visualize("sh", "java", "ds_with_duplicates", ds_path, lazy_mode)
+# try_visualize("kp", "java", "ds_with_duplicates", ds_path, lazy_mode)
+# try_visualize("as", "java", "ds_with_duplicates", ds_path, lazy_mode)
 
-try_visualize("st", "java", "ds_no_duplicates", ds_path, lazy_mode)
-try_visualize("sh", "java", "ds_no_duplicates", ds_path, lazy_mode)
-try_visualize("kp", "java", "ds_no_duplicates", ds_path, lazy_mode)
-try_visualize("as", "java", "ds_no_duplicates", ds_path, lazy_mode)
+# try_visualize("st", "java", "ds_no_duplicates", ds_path, lazy_mode)
+# try_visualize("sh", "java", "ds_no_duplicates", ds_path, lazy_mode)
+# try_visualize("kp", "java", "ds_no_duplicates", ds_path, lazy_mode)
+# try_visualize("as", "java", "ds_no_duplicates", ds_path, lazy_mode)
+
+try_visualize("st", "java", "astnn_t4", ds_path, lazy_mode)
+try_visualize("sh", "java", "astnn_t4", ds_path, lazy_mode)
+try_visualize("kp", "java", "astnn_t4", ds_path, lazy_mode)
+try_visualize("as", "java", "astnn_t4", ds_path, lazy_mode)

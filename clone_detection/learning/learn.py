@@ -22,7 +22,6 @@ from sklearn.metrics import precision_recall_fscore_support
 from sklearn.model_selection import train_test_split
 import expreport as report
 
-
 def load_img(img_path, img_id):
     return Image.open("%s/%s.png" % (img_path, img_id)).convert('RGB')
 
@@ -405,46 +404,56 @@ def learn(data_path, image_path, pairs_path, epochs=5, retrain=True):
         y_test.append(0 if r["type"] <= 0 else 1)
 
     # run SVM
-    clf = svm.SVC()
-    clf.fit(x_train, y_train)
-    confidence = clf.score(x_test, y_test)
-    y_pred = clf.predict(x_test)
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
-    print("SVM :: ")
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
-    print("raw - P: %s; R: %s, F1: %s" % (precision, recall, f1))
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='binary')
-    print("P: %s; R: %s, F1: %s" % (precision, recall, f1))
-    report.report.add_result(confidence, precision, recall, f1, "svm"+("" if not retrain else "_r"))
-    print("CSV-RESULT: %s, %s, %s, %s, %s" % ("svm"+("" if not retrain else "_r"),confidence, precision, recall, f1))
-    print()
+    kernels = {'linear', 'poly', 'rbf', 'sigmoid'}
+    for kernel in kernels:
+        try:
+            clf = svm.SVC(kernel=kernel)
+            clf.fit(x_train, y_train)
+            confidence = clf.score(x_test, y_test)
+            y_pred = clf.predict(x_test)
+            precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
+            print(kernel + "SVM :: ")
+            precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
+            print("raw - P: %s; R: %s, F1: %s" % (precision, recall, f1))
+            precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='binary')
+            print("P: %s; R: %s, F1: %s" % (precision, recall, f1))
+            report.report.add_result(confidence, precision, recall, f1, kernel + "-svm"+("" if not retrain else "_r"))
+            print("CSV-RESULT: %s, %s, %s, %s, %s" % (kernel + "svm"+("" if not retrain else "_r"),confidence, precision, recall, f1))
+            print()
+        except:
+            print('SVM Error with kernel = ' + kernel)
 
     # run kNN
-    clf = neighbors.KNeighborsClassifier()
-    clf.fit(x_train, y_train)
-    confidence = clf.score(x_test, y_test)
-    y_pred = clf.predict(x_test)
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
-    print("kNN :: ")
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
-    print("raw - P: %s; R: %s, F1: %s" % (precision, recall, f1))
-    precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='binary')
-    print("P: %s; R: %s, F1: %s" % (precision, recall, f1))
-    report.report.add_result(confidence, precision, recall, f1, "knn"+("" if not retrain else "_r"))
-    print("CSV-RESULT: %s, %s, %s, %s, %s" % ("knn"+("" if not retrain else "_r"), confidence, precision, recall, f1))
-    print()
+    algos = {'ball_tree', 'kd_tree', 'brute'}
+    for algo in algos:
+        try:
+            clf = neighbors.KNeighborsClassifier(algorithm=algo)
+            clf.fit(x_train, y_train)
+            confidence = clf.score(x_test, y_test)
+            y_pred = clf.predict(x_test)
+            precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
+            print(algo + "-kNN :: ")
+            precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred)
+            print("raw - P: %s; R: %s, F1: %s" % (precision, recall, f1))
+            precision, recall, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='binary')
+            print("P: %s; R: %s, F1: %s" % (precision, recall, f1))
+            report.report.add_result(confidence, precision, recall, f1, algo + "-knn"+("" if not retrain else "_r"))
+            print("CSV-RESULT: %s, %s, %s, %s, %s" % ("knn"+("" if not retrain else "_r"), confidence, precision, recall, f1))
+            print()
+        except:
+            print('KNN Error with algo = ' + algo)
 
     # run NN
-    dataloaders = {x: torch.utils.data.DataLoader(pdds[x], batch_size=4, shuffle=True, num_workers=4)
-                   for x in ['train', 'test']}
-    dataset_sizes = {x: len(ds[x].index) for x in ['train', 'test']}
+    # dataloaders = {x: torch.utils.data.DataLoader(pdds[x], batch_size=4, shuffle=True, num_workers=4)
+    #                for x in ['train', 'test']}
+    # dataset_sizes = {x: len(ds[x].index) for x in ['train', 'test']}
 
-    model = CCDBinClassifier(2048)
-    model = model.to(device)
+    # model = CCDBinClassifier(2048)
+    # model = model.to(device)
 
-    parameters = model.parameters()
-    optimizer = torch.optim.Adamax(parameters)
-    loss_function = torch.nn.BCELoss()
-    exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.2)
+    # parameters = model.parameters()
+    # optimizer = torch.optim.Adamax(parameters)
+    # loss_function = torch.nn.BCELoss()
+    # exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.2)
 
-    train_model(model, dataloaders, dataset_sizes, loss_function, optimizer, exp_lr_scheduler, num_epochs=epochs, retrain=retrain)
+    # train_model(model, dataloaders, dataset_sizes, loss_function, optimizer, exp_lr_scheduler, num_epochs=epochs, retrain=retrain)
