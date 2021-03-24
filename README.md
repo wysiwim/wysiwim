@@ -11,13 +11,13 @@ The *code classification* consists of attributing a functionality label to a cod
 As depicted directly below, we implement this approach by visualizing our code as an image and use the resulting images to retrain a pre-trained image classification neural network, namely ResNet (ResNet18 and ResNet50 for comparison). You may refer to the original paper for further implementation details or have a direct look at the code.  
 
 
-![Code Classification Architecture](/images/architecture_cc.png)  
+![Code Classification Architecture](images/codeClassification.png)  
 
 
 The *semantic code clone detection task* consists of deciding, given two code fragments, whether or not they represent a pair of semantic clones.  
 As depicted directly below, we implement this approach by visualizing both code fragments as an image respectively, then we use a pre-trained ResNet50 image classification neural network again but remove the last layer in order to extract the internal feature vectors of the network. Those feature vectors are then used to train one of three different classical binary classification algorithms (Support Vector Machine, k Nearest Neighbours and a simple neural network). Again for further implementation details, please refer to our original paper.  
 
-![Code Clone Detection Architecture](/images/architecture_ccd.png)  
+![Code Clone Detection Architecture](images/codeClone.png)  
 
 
 ## Contents of this repository  
